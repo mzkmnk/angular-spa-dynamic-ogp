@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "frontend:start": "pnpm --filter='frontend' start"
+    "frontend:start": "pnpm --filter='frontend' start",
+    "frontend:build": "pnpm --filter='frontend' build"
   },
   "keywords": [],
   "author": "",
