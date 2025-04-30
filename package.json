@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "frontend:start": "pnpm --filter='frontend' start",
-    "frontend:build": "pnpm --filter='frontend' build"
+    "frontend:build": "pnpm --filter='frontend' build",
+    "infra:bootstrap": "pnpm --filter='infra' bootstrap",
+    "infra:deploy": "pnpm --filter='infra' run deploy"
   },
   "keywords": [],
   "author": "",
