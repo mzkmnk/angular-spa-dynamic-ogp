@@ -31,8 +31,23 @@ export class InfraStack extends cdk.Stack {
     const webSiteDistribution = new cloudfront.Distribution(this, 'WebSiteDistribution', {
       defaultRootObject: 'index.html',
       defaultBehavior: {
-        origin: cloudfrontOrigins.S3BucketOrigin.withOriginAccessControl(webSiteBucket)
+        origin: cloudfrontOrigins.S3BucketOrigin.withOriginAccessControl(webSiteBucket),
       },
+      errorResponses: [
+        {
+          httpStatus:403,
+          responseHttpStatus:200,
+          responsePagePath: '/index.html',
+          ttl: cdk.Duration.seconds(0)
+          
+        },
+        {
+          httpStatus:404,
+          responseHttpStatus:200,
+          responsePagePath: '/index.html',
+          ttl: cdk.Duration.seconds(0)
+        }
+      ]
     })
     
     new s3Deployment.BucketDeployment(this, 'S3Deployment', {
