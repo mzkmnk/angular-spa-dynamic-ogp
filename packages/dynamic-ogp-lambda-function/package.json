@@ -1,0 +1,9 @@
+{
+  "name":"dynamic-ogp-lambda-function",
+  "version": "0.0.0",
+  "dependencies": {
+    "phin": "3.7.1",
+    "centra": "^2.7.0",
+    "follow-redirects": "^1.15.9"
+  }
+}
