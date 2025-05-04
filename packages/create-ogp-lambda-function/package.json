@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "hono": "^4.7.8",
+    "@vercel/og": "^0.6.8"
+  }
+}
