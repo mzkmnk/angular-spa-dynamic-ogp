@@ -33,11 +33,29 @@ export class InfraStack extends cdk.Stack {
     // add policy
     webSiteBucket.addToResourcePolicy(webSiteBucketPolicy);
     
+    // add lambda@edge permission policy
+    const edgeRole = new iam.Role(this, 'EdgeRole', {
+      assumedBy: new iam.CompositePrincipal(
+        new iam.ServicePrincipal('edgelambda.amazonaws.com'),
+        new iam.ServicePrincipal('lambda.amazonaws.com'),
+      ),
+      managedPolicies: [
+        iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole')
+      ],
+    })
+    
+    edgeRole.addToPrincipalPolicy(new iam.PolicyStatement({
+      actions: ['s3:GetObject'],
+      effect: iam.Effect.ALLOW,
+      resources: [`${webSiteBucket.bucketArn}/*`]
+    }))
+    
     // lambda@edge
     const edgeFunction = new cloudfront.experimental.EdgeFunction(this, 'EdgeFunction', {
       code: lambda.Code.fromAsset('../dynamic-ogp-lambda-function'),
       handler: 'index.handler',
-      runtime: lambda.Runtime.NODEJS_22_X
+      runtime: lambda.Runtime.NODEJS_22_X,
+      role: edgeRole,
     })
     
     // distribution
