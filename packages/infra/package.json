@@ -10,7 +10,8 @@
     "test": "jest",
     "cdk": "cdk",
     "deploy": "cdk deploy",
-    "bootstrap": "cdk bootstrap"
+    "bootstrap": "cdk bootstrap",
+    "destroy": "cdk destroy"
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",
@@ -19,7 +20,8 @@
     "ts-jest": "^29.2.5",
     "aws-cdk": "2.1012.0",
     "ts-node": "^10.9.2",
-    "typescript": "~5.6.3"
+    "typescript": "~5.6.3",
+    "esbuild": "^0.25.3"
   },
   "dependencies": {
     "aws-cdk-lib": "2.190.0",

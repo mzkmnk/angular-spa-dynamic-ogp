@@ -7,7 +7,9 @@
     "frontend:start": "pnpm --filter='frontend' start",
     "frontend:build": "pnpm --filter='frontend' build",
     "infra:bootstrap": "pnpm --filter='infra' bootstrap",
-    "infra:deploy": "pnpm --filter='infra' run deploy"
+    "infra:deploy": "pnpm --filter='infra' run deploy",
+    "infra:destroy": "pnpm --filter='infra' run destroy",
+    "ogp:build": "pnpm --filter='create-ogp' run build"
   },
   "keywords": [],
   "author": "",
