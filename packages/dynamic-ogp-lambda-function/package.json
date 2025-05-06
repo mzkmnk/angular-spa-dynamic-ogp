@@ -1,4 +1,13 @@
 {
-  "name":"dynamic-ogp-lambda-function",
-  "version": "0.0.0"
+  "name": "dynamic-ogp-lambda-function",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.803.0",
+    "@aws-sdk/s3-request-presigner": "^3.804.0"
+  },
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.6.1"
 }
