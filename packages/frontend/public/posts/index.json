@@ -1,0 +1,12 @@
+[
+  {
+    "id": "1",
+    "title": "Signalについて",
+    "tags": ["Angular","Signal","Web"]
+  },
+  {
+    "id": "2",
+    "title": "OGPについて",
+    "tags": ["Web"]
+  }
+]

@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "target": "ES2022",
+    "module": "ES2022",
+    "moduleResolution": "bundler",
+    "importHelpers": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "strict": true,
+    "jsx": "react",
+    "types": [
+      "node",
+      "react"
+    ]
+  },
+  "include": [
+    "src/**/*",
+    "types/**/*.d.ts"
+  ]
+}

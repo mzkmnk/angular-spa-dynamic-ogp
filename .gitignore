@@ -1,1 +1,3 @@
 /node_modules
+
+/packages/dynamic-ogp-lambda-function/node_modules
