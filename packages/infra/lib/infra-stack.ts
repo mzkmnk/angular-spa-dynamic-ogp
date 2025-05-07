@@ -23,7 +23,9 @@ export class InfraStack extends cdk.Stack {
     const ogpBucket = new s3.Bucket(this, 'ogpBucket');
     
     // OAI
-    const webSiteIdentify = new cloudfront.OriginAccessIdentity(this, 'WebSiteIdentify', {comment: 'WebSiteIdentify'})
+    const webSiteIdentify = new cloudfront.OriginAccessIdentity(this, 'WebSiteIdentify', {comment: 'WebSiteIdentify'});
+    
+    const ogpIdentify = new cloudfront.OriginAccessIdentity(this, 'OgpIdentify', {comment: 'OgpIdentify'});
     
     // bucket policy
     const webSiteBucketPolicy = new iam.PolicyStatement({
@@ -35,8 +37,19 @@ export class InfraStack extends cdk.Stack {
       resources: [`${webSiteBucket.bucketArn}/*`]
     })
     
+    // ogp bucket policy
+    const ogpBucketPolicy = new iam.PolicyStatement({
+      actions: ['s3:GetObject'],
+      effect: iam.Effect.ALLOW,
+      principals: [
+        ogpIdentify.grantPrincipal
+      ],
+      resources: [`${ogpBucket.bucketArn}/*`]
+    })
+    
     // add policy
     webSiteBucket.addToResourcePolicy(webSiteBucketPolicy);
+    ogpBucket.addToResourcePolicy(ogpBucketPolicy);
     
     // add lambda@edge permission policy
     const edgeRole = new iam.Role(this, 'EdgeRole', {
@@ -49,20 +62,7 @@ export class InfraStack extends cdk.Stack {
       ],
     })
     
-    // edgeRole.addToPrincipalPolicy(new iam.PolicyStatement({
-    //   actions: ['s3:ListBucket'],
-    //   effect: iam.Effect.ALLOW,
-    //   resources: [webSiteBucket.bucketArn,ogpBucket.bucketArn]
-    // }))
-    //
-    // edgeRole.addToPrincipalPolicy(new iam.PolicyStatement({
-    //   actions: ['s3:GetObject'],
-    //   effect: iam.Effect.ALLOW,
-    //   resources: [`${webSiteBucket.bucketArn}/*`,`${ogpBucket.bucketArn}/*`]
-    // }))
-    
     webSiteBucket.grantRead(edgeRole);
-    ogpBucket.grantRead(edgeRole);
     
     const ogpFn = new NodejsFunction(this, 'OgpFn', {
       entry: path.join(__dirname, '../../dynamic-ogp-lambda-function/src/index.ts'),
@@ -75,7 +75,7 @@ export class InfraStack extends cdk.Stack {
       role: edgeRole,
     })
     
-    // distribution
+    // website distribution
     const webSiteDistribution = new cloudfront.Distribution(this, 'WebSiteDistribution', {
       defaultRootObject: 'index.html',
       defaultBehavior: {
@@ -102,6 +102,13 @@ export class InfraStack extends cdk.Stack {
           ttl: cdk.Duration.seconds(0)
         }
       ]
+    });
+    
+    // ogp distribution
+    const ogpDistribution = new cloudfront.Distribution(this,'OgpDistribution',{
+      defaultBehavior: {
+        origin: cloudfrontOrigins.S3BucketOrigin.withOriginAccessControl(ogpBucket),
+      }
     })
     
     // web bucket s3 deploy
@@ -114,7 +121,8 @@ export class InfraStack extends cdk.Stack {
     // ogp bucket s3 deploy
     new s3Deployment.BucketDeployment(this, 'OgpS3Deployment', {
       sources: [s3Deployment.Source.asset('../create-ogp/ogps')],
-      destinationBucket: ogpBucket
+      destinationBucket: ogpBucket,
+      distribution: ogpDistribution,
     })
   }
 }
